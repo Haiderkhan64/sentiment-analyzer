@@ -53,22 +53,48 @@ body {
   flex-direction: row;
   margin: 15px;
   margin-top: 22px;
+  text-decoration: none;
 }
 
 .logo-text {
+  text-decoration: none;
   font-weight: bold;
-  margin-left: 10px;
+  margin-left: 18px;
   margin-top: 1px;
   margin-bottom: 5px;
   font-size: 1.4rem;
   color: #f9f9f9;
-  transition: background-color 0.5s ease, transform 0.3s ease;
+  transition: background-color 0.9s ease, transform 0.3s ease;
 }
 
 .logo-text:hover {
-  background-color: rgb(255, 255, 255);
+  /* background-color: rgb(255, 255, 255); */
   transform: scale(1.1);
   font-size: 1.6rem;
+}
+
+.logout-and-user-btn {
+  display: flex;
+  flex-direction: row;
+  margin: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+.logout {
+  margin-right: 12px;
+  transition: all 0.8s ease;
+  display: flex;
+}
+
+.logout:hover {
+  background-color: rgb(1, 36, 36);
+
+  border-radius: 10px;
+  height: 40px;
+  width: 40px;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Prompt Section */
