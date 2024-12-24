@@ -1,5 +1,4 @@
-// app/(auth)/layout.tsx
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+// app/(auth)/layout.tsxss
 import "@/app/(auth)/style.css";
 export default function AuthLayout({
   children,
