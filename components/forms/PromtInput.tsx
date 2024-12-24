@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import SentimentAnalyzer from "@/app/(root)/response/page";
+import { useGlobalState } from "@/app/context/GlobalStateContext";
 
 // Custom hook for debouncing
 function useDebounce(value, delay) {
@@ -17,10 +17,12 @@ function useDebounce(value, delay) {
 
 function Prompt() {
   const [prompt, setPrompt] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState(null);
+  // const [submittedPrompt, setSubmittedPrompt] = useState("");
+  const { isLoading, setIsLoading, setError, setSubmittedPrompt } =
+    useGlobalState();
   const debouncedPrompt = useDebounce(prompt, 500);
-  const [submittedPrompt, setSubmittedPrompt] = useState("");
 
   useEffect(() => {
     if (debouncedPrompt) {
@@ -50,16 +52,6 @@ function Prompt() {
 
   return (
     <div className="response-section-And-Input-form">
-      <div className="response-section">
-        {/* Feedback messages */}
-        {error && <p className="error-message">{error}</p>}
-        {isLoading && <p>Analyzing sentiment...</p>}
-        {/* SentimentAnalyzer only renders if not loading */}
-        {!isLoading && submittedPrompt && (
-          // <SentimentAnalyzer value={{ promptStr: submittedPrompt }} />
-          <SentimentAnalyzer promptStr={submittedPrompt} />
-        )}
-      </div>
       <div className="form-input">
         <form onSubmit={handleSubmit} className="container">
           <label htmlFor="prompt-input" className="visually-hidden">

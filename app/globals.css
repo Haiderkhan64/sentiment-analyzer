@@ -79,6 +79,9 @@ body {
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #000000, #1f1f1f);
+  height: 93vh;
+  width: 85vw;
+  /* width: 100vw; */
 }
 
 /* Input Styling */
@@ -136,7 +139,7 @@ button {
 }
 
 button:hover {
-  background-color: rgb(8, 75, 65);
+  background-color: #084b41;
   transform: scale(1.1);
 }
 
@@ -144,11 +147,13 @@ button:hover {
 .response-section {
   margin-bottom: 1em;
   height: 73vh;
+  overflow: auto;
 }
 
 .analysis-result {
-  background-color: #9c9c9c;
-  color: #333;
+  color: aliceblue;
+  background-color: #5a5763;
+  background: linear-gradient(135deg, #084b41, #383838);
 }
 
 .analysis-result pre {
@@ -166,4 +171,56 @@ h1 {
   font-size: 1.5rem;
   margin-bottom: 1em;
   text-align: center;
+}
+
+/* Scrollbar customization for the left sidebar */
+.left-sidebar {
+  background-color: #084b41;
+  border: 5px solid #04211c;
+  border-radius: 5px;
+  overflow-y: auto; /* Enable vertical scrolling */
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #888 #f1f1f1; /* Thumb and track colors */
+  height: 93vh;
+  width: 25vw;
+}
+
+.left-sidebar::-webkit-scrollbar {
+  width: 8px; /* Scrollbar width */
+}
+
+.left-sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track color */
+}
+
+.left-sidebar::-webkit-scrollbar-thumb {
+  background: #888; /* Thumb color */
+  border-radius: 4px; /* Rounded corners */
+}
+
+.left-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Thumb color on hover */
+}
+
+/* Flex container styles */
+.flex-container {
+  display: flex; /* Flexbox layout */
+  flex-direction: column; /* Stack items vertically */
+  gap: 1.5rem; /* Space between items */
+  padding: 0 1.5rem; /* Horizontal padding (px-6 in Tailwind) */
+  flex-grow: 1; /* Allow the container to grow */
+  width: 100%; /* Full width */
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  /* height: 93vh; */
+  /* width: 100vw; */
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
