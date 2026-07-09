@@ -1,0 +1,22 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+.venv/
+*.egg-info/
+
+# Django's local dev DB — only used for admin/sessions locally; a real
+# deployment should be pointed at Postgres via DATABASE settings, not
+# shipping this file inside the image
+db.sqlite3
+
+.git
+.gitignore
+.DS_Store
+
+.env
+.env.*
+
+*.log

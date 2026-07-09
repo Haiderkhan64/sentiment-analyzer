@@ -1,0 +1,12 @@
+.idea/
+
+sentiment-analyzer-frontend/
+
+sentiment-analyzer-backend/**/db.sqlite3
+sentiment-analyzer-backend/**/env/
+sentiment-analyzer-backend/**/venv/
+sentiment-analyzer-backend/**/__pycache__/
+sentiment-analyzer-backend/**/.env
+
+.DS_Store
+*.log
