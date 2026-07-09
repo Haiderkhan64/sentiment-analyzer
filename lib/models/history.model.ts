@@ -1,29 +1,53 @@
-import { model, Schema, Types } from "mongoose";
+import { Schema, model, models, Model, Document } from "mongoose";
 
-// Define a sub-schema for history_group_id
-const HistoryGroupSchema = new Schema({
-  forSequence: { type: Number, required: true },
-  divide_in_to_groups: { type: Number, required: true },
-});
+interface ISentimentHistory {
+  user_id: string; // Reference to User's user_id (string)
+  history_group_id: {
+    forSequence: number;
+    divide_in_to_groups: number;
+  };
+  prompt: string;
+  response: string[]; 
+}
 
-// Define the main schema
+// Extend Mongoose's Document for additional properties
+export interface ISentimentHistoryDocument
+  extends Document,
+    ISentimentHistory {}
+
+// Define the Mongoose model interface
+type ISentimentHistoryModel = Model<ISentimentHistoryDocument>;
+
 const SentimentHistorySchema = new Schema(
   {
-    user_id: { type: Types.ObjectId, ref: "User", required: true },
-    history_group_id: { type: HistoryGroupSchema, required: true }, // Use the sub-schema
+    user_id: {
+      type: String,
+      ref: "User", // Reference to User's user_id field
+      required: true,
+    },
+    history_group_id: {
+      forSequence: { type: Number, default: 0 },
+      divide_in_to_groups: { type: Number, required: true },
+    },
     prompt: { type: String, required: true },
-    response: { type: String, required: true },
-    time_stamp: { type: Date, default: Date.now }, // Default will handle the required constraint
+    response: {
+      type: [String],
+      required: true,
+      // validate: {
+      //   validator: (val) => val.length > 0,
+      //   message: "Response must contain at least one string.",
+      // },
+    },
   },
-  { timestamps: true } // Adds createdAt and updatedAt
+  { timestamps: true }
 );
 
-// Add an index for better query performance
-SentimentHistorySchema.index({ user_id: 1 });
-
-const SentimentHistoryModel = model(
-  "SentimentHistoryModel",
-  SentimentHistorySchema
-);
+// Check if the model is already defined to prevent overwriting
+const SentimentHistoryModel =
+  models.SentimentHistory ||
+  model<ISentimentHistoryDocument, ISentimentHistoryModel>(
+    "SentimentHistory",
+    SentimentHistorySchema
+  );
 
 export default SentimentHistoryModel;

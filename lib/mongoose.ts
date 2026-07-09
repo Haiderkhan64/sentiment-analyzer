@@ -29,12 +29,15 @@ export const connectToDB = async () => {
             // sslCert: <path-to-cert>,
             // sslKey: <path-to-key>,
           });
-
           isConnected = true;
           console.log("Connected successfully to MongoDB.");
           return;
         } catch (error) {
-          console.error(`Attempt ${i + 1} failed: ${error.message}`);
+          if (error instanceof Error) {
+            console.error(`Attempt ${i + 1} failed: ${error.message}`);
+          } else {
+            console.error(`Attempt ${i + 1} failed: Unknown error`);
+          }
           if (i < retries - 1) {
             console.log(`Retrying in ${delay / 1000} seconds...`);
             await new Promise((resolve) => setTimeout(resolve, delay));
@@ -70,6 +73,10 @@ export const connectToDB = async () => {
       process.exit(0);
     });
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
+    if (error instanceof Error) {
+      console.error("Error connecting to MongoDB:", error.message);
+    } else {
+      console.error("Error connecting to MongoDB: Unknown error");
+    }
   }
 };
