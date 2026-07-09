@@ -16,7 +16,6 @@ export async function GET() {
 
     // Fetch user from the database
     const ownDatabaseUser = await fetchUser({ id: user.id });
-    console.log("Fetched user from database:", ownDatabaseUser);
 
     // If user does not exist in the database, create a new user
     if (!ownDatabaseUser) {
@@ -30,7 +29,7 @@ export async function GET() {
         history: [],
       });
     } else {
-      console.log(`User with ID ${user.id} found in database.`);
+      console.log(`User with name ${user.username} found in database.`);
     }
 
     // Return success response with user details
