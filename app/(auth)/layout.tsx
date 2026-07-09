@@ -6,8 +6,8 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="auth">
-      <main>{children}</main>
+    <div className="auth-container">
+      <main className="main-auth">{children}</main>
     </div>
   );
 }
