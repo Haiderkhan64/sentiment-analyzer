@@ -1,36 +1,25 @@
 import Link from "next/link";
 import Image from "next/image";
-import { SignedIn, SignOutButton } from "@clerk/nextjs";
-import { UserButton } from "@clerk/nextjs";
-// import { dark } from "@clerk/themes";
-const TopBar = () => {
+import { SignedIn, SignOutButton, UserButton } from "@clerk/nextjs";
+
+export default function Topbar() {
   return (
-    <nav className="topbar">
-      <Link href="/" className="logo">
-        <Image src="/assets/logo.svg" alt="logo" width={28} height={28} />
-        <p className="logo-text">Sentiment analyzer</p>
+    <header className="topbar">
+      <Link href="/" className="topbar-logo">
+        <Image src="/assets/logo.svg" alt="logo" width={26} height={26} className="topbar-logo-img" />
+        <span className="topbar-logo-text">Sentiment<span className="topbar-logo-accent">AI</span></span>
       </Link>
 
-      <div className="logout-and-user-btn">
-        <div className="logout">
-          <SignedIn>
-            <SignOutButton>
-              <div className="logout-logo">
-                <Image
-                  src="/assets/logout.svg"
-                  alt="logout"
-                  width={24}
-                  height={24}
-                />
-              </div>
-            </SignOutButton>
-          </SignedIn>
-        </div>
-        <div className="usr-btn">
-          <UserButton />
-        </div>
+      <div className="topbar-actions">
+        <SignedIn>
+          <SignOutButton>
+            <button className="topbar-logout" aria-label="Sign out">
+              <Image src="/assets/logout.svg" alt="logout" width={18} height={18} />
+            </button>
+          </SignOutButton>
+        </SignedIn>
+        <UserButton />
       </div>
-    </nav>
+    </header>
   );
-};
-export default TopBar;
+}
