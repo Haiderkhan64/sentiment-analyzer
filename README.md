@@ -5,7 +5,7 @@
 ![Django](https://img.shields.io/badge/Django-5.1-092E20?logo=django)
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
-![License](https://img.shields.io/badge/license-unspecified-lightgrey)
+![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 
 A full-stack sentiment analysis app. Submit text and get back **streamed, word-by-word sentiment scoring** from a DistilBERT model, rendered as an interactive D3 line/area chart plus a confidence donut, with per-user analysis history persisted in MongoDB and Clerk auth enforced end-to-end — including on the inference endpoint itself.
 
@@ -338,4 +338,20 @@ Coverage: missing-input validation (`400`), over-length input (`400`), and the s
 
 ## License
 
-No license has been specified yet. Add a `LICENSE` file to clarify how others may use this code.
+Licensed under the [Apache License, Version 2.0](LICENSE).
+
+```
+Copyright 2024-2026 Haider Khan
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
