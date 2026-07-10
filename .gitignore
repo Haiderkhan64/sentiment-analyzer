@@ -1,7 +1,5 @@
 .idea/
 
-sentiment-analyzer-frontend/
-
 sentiment-analyzer-backend/**/db.sqlite3
 sentiment-analyzer-backend/**/env/
 sentiment-analyzer-backend/**/venv/
