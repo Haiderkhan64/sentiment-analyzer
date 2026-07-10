@@ -1,0 +1,29 @@
+/* app/(auth)/style.css */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+
+  background: linear-gradient(135deg, #000000, #084b41);
+}
+
+.main-auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1000px; /* or your preferred max-width */
+  padding: 20px;
+  background: linear-gradient(135deg, #000000, #084b41);
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Adding shadow */
+}
+
+/* If you need to style the Clerk components specifically */
+.cl-card {
+  width: 100% !important;
+  border-radius: 8px !important;
+  padding: 24px !important;
+}
