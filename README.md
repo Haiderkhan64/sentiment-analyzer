@@ -11,7 +11,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 
-A full-stack sentiment analysis app. Submit text and get back **streamed, word-by-word sentiment scoring** from a DistilBERT model, rendered as an interactive D3 line/area chart plus a confidence donut, with per-user analysis history persisted in MongoDB and Clerk auth enforced end-to-end — including on the inference endpoint itself.
+A full-stack sentiment analysis app. Submit text and get back **streamed, word-by-word sentiment scoring** from a DistilBERT model, rendered as an interactive D3 line/area chart plus a confidence donut, with per-user analysis history persisted in MongoDB and Clerk auth enforced end-to-end including on the inference endpoint itself.
 
 ---
 
@@ -33,12 +33,12 @@ A full-stack sentiment analysis app. Submit text and get back **streamed, word-b
 
 ## Overview
 
-The user types text into the prompt box. The frontend calls the Django backend **directly** (not proxied through Next.js) with a Clerk-issued bearer token. Django verifies that token itself, runs the text through a HuggingFace sentiment pipeline — once for the full sentence, once batched across every word — and streams the results back as plain text, one line at a time, so the UI can render a live "processing" feed as tokens arrive. Once the stream ends, the frontend parses it into structured data and hands it to a D3 visualization (an animated confidence line/area chart plus a donut breakdown), while asynchronously saving the prompt/response pair to MongoDB for the session-history sidebar.
+The user types text into the prompt box. The frontend calls the Django backend **directly** (not proxied through Next.js) with a Clerk-issued bearer token. Django verifies that token itself, runs the text through a HuggingFace sentiment pipeline once for the full sentence, once batched across every word and streams the results back as plain text, one line at a time, so the UI can render a live "processing" feed as tokens arrive. Once the stream ends, the frontend parses it into structured data and hands it to a D3 visualization (an animated confidence line/area chart plus a donut breakdown), while asynchronously saving the prompt/response pair to MongoDB for the session-history sidebar.
 
 **Key properties:**
-- Inference is **authenticated** — `/api/analyze/` is not an open endpoint.
+- Inference is **authenticated** `/api/analyze/` is not an open endpoint.
 - Inference is **rate-limited and input-capped** server-side, independent of any client-side limits.
-- Product data (users, history) lives entirely in MongoDB, owned by the Next.js layer — Django never touches it.
+- Product data (users, history) lives entirely in MongoDB, owned by the Next.js layer Django never touches it.
 
 ## Architecture
 
