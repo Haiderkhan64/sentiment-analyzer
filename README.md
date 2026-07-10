@@ -1,4 +1,4 @@
-# Sentiment Analyzer
+<h1 align="center">Sentiment Analyzer</h1>
 
 <p align="center">
   <img src="sentiment-analyzer-frontend/public/assets/logo.svg" alt="Sentiment Analyzer logo" width="140"/>
