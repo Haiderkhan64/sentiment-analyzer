@@ -184,7 +184,7 @@ Django reads config directly from `os.environ`; `manage.py` loads a `.env` next 
 | `CLERK_SECRET_KEY` | Yes | — | Clerk server-side key |
 | `NEXT_PUBLIC_API_URL` | No | `http://127.0.0.1:8000/api/analyze/` | Where Django is running. Inlined into the client bundle at **build time** — treat it as public, not secret. |
 
-### 2. Option A — Nix (recommended)
+### 2. Option A Nix (recommended)
 
 ```bash
 nix develop              # full stack (frontend + backend tools)
@@ -194,7 +194,7 @@ nix develop .#backend
 
 Then follow the manual steps below inside the shell.
 
-### 3. Option B — Manual setup
+### 3. Option B Manual setup
 
 **Backend:**
 ```bash
@@ -204,7 +204,7 @@ source env/bin/activate
 pip install -r requirements.txt
 
 # torch is intentionally commented out of requirements.txt (it needs the
-# CPU-only wheel index, not PyPI) — install it separately or you'll hit
+# CPU-only wheel index, not PyPI) install it separately or you'll hit
 # ModuleNotFoundError: torch
 pip install torch==2.5.1+cpu torchvision==0.20.1+cpu torchaudio==2.5.1+cpu \
   --index-url https://download.pytorch.org/whl/cpu
@@ -224,7 +224,7 @@ npm run dev
 ```
 Runs at `http://localhost:3000`.
 
-### 4. Option C — Docker Compose
+### 4. Option C Docker Compose
 
 Create a `.env` at the **repo root**:
 ```env
@@ -274,7 +274,7 @@ Content-Type: application/json
 
 `401` → missing/invalid token. `400` → missing `text`, or `text` over 5,000 characters.
 
-**Response** — `text/plain`, streamed, one result per line. Confidence values are full-precision floats, not rounded:
+**Response** `text/plain`, streamed, one result per line. Confidence values are full-precision floats, not rounded:
 ```
 I - Sentiment: POSITIVE - Confidence: 0.8734182119369507
 absolutely - Sentiment: POSITIVE - Confidence: 0.9912316799163818
@@ -284,33 +284,33 @@ project - Sentiment: NEUTRAL - Confidence: 0.7100392580032349
 
 -Overall- Sentiment: POSITIVE - Confidence: 0.9945602416992188
 ```
-The overall-sentence result is computed once up front; per-word results are one **batched** pipeline call (not one call per word), streamed out sequentially to preserve the line-by-line UI effect. If inference fails mid-stream — after headers are already sent — the generator catches the exception and yields `[error] Analysis interrupted.` instead of leaking a raw traceback into the response body.
+The overall-sentence result is computed once up front; per-word results are one **batched** pipeline call (not one call per word), streamed out sequentially to preserve the line-by-line UI effect. If inference fails mid-stream after headers are already sent the generator catches the exception and yields `[error] Analysis interrupted.` instead of leaking a raw traceback into the response body.
 
 ## Troubleshooting
 
 **`KeyError: 'CLERK_ISSUER'` on Django startup**
-`CLERK_ISSUER` isn't set. Export it locally, add it to the backend `.env`, or (for Docker Compose) add it to the root `.env` file — the compose file already passes it through to the container.
+`CLERK_ISSUER` isn't set. Export it locally, add it to the backend `.env`, or (for Docker Compose) add it to the root `.env` file the compose file already passes it through to the container.
 
 **`401 Unauthorized` from `/api/analyze/`**
 Either the frontend never attached a bearer token (a stale or signed-out Clerk session returns `null` from `getToken()`), the token expired, or the backend's `CLERK_ISSUER` points at a different Clerk instance than the one issuing the frontend's tokens.
 
 **`CommandError: You must set settings.ALLOWED_HOSTS if DEBUG is False`**
-`manage.py runserver` run manually without `DJANGO_DEBUG` exported — it defaults to `False`, which requires `DJANGO_ALLOWED_HOSTS`. Fix: `export DJANGO_DEBUG=True` locally. (Docker Compose doesn't hit this — it defaults `DJANGO_ALLOWED_HOSTS` already.)
+`manage.py runserver` run manually without `DJANGO_DEBUG` exported it defaults to `False`, which requires `DJANGO_ALLOWED_HOSTS`. Fix: `export DJANGO_DEBUG=True` locally. (Docker Compose doesn't hit this it defaults `DJANGO_ALLOWED_HOSTS` already.)
 
 **`ModuleNotFoundError: No module named 'torch'`**
-`requirements.txt` deliberately comments out `torch`/`torchvision`/`torchaudio` since they need PyTorch's CPU-only wheel index, not PyPI. Install them separately — see [Option B](#3-option-b--manual-setup).
+`requirements.txt` deliberately comments out `torch`/`torchvision`/`torchaudio` since they need PyTorch's CPU-only wheel index, not PyPI. Install them separately see [Option B](#3-option-b--manual-setup).
 
 **Can't find `manage.py`**
-You're in the outer `sentiment-analyzer-backend/` folder — descend one more level to the inner one.
+You're in the outer `sentiment-analyzer-backend/` folder descend one more level to the inner one.
 
 **Clerk publishable key blank, or auth breaks only in the Docker build**
-Confirm the root `.env` actually has `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` set *before* `docker-compose up --build` — it's a Dockerfile `ARG` baked in at build time, so setting it after the image is built won't help; rebuild.
+Confirm the root `.env` actually has `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` set *before* `docker-compose up --build` it's a Dockerfile `ARG` baked in at build time, so setting it after the image is built won't help; rebuild.
 
 **First request after a fresh backend start is slow**
-Expected — the DistilBERT pipeline loads on the first call to `/api/analyze/`, not at process start. Subsequent requests reuse the cached pipeline.
+Expected the DistilBERT pipeline loads on the first call to `/api/analyze/`, not at process start. Subsequent requests reuse the cached pipeline.
 
 **`429 Too Many Requests`**
-The `analyze` throttle scope allows 20 req/min per caller. This is a per-process, in-memory throttle (DRF's default cache backend) — it resets on restart and isn't shared across multiple Gunicorn workers/replicas (see [Known Issues](#known-issues)).
+The `analyze` throttle scope allows 20 req/min per caller. This is a per-process, in-memory throttle (DRF's default cache backend) it resets on restart and isn't shared across multiple Gunicorn workers/replicas (see [Known Issues](#known-issues)).
 
 ## Testing
 
@@ -326,17 +326,17 @@ Coverage: missing-input validation (`400`), over-length input (`400`), and the s
 ## Known Issues
 
 **Correctness / scaling:**
-- **In-memory throttle doesn't scale past one worker** — `ScopedRateThrottle`'s default cache backend is per-process. With Gunicorn's 2 workers (or any horizontal scaling), the effective limit is closer to `20 × worker_count`/min, not a global 20/min. Needs a shared cache (Redis/Memcached).
-- **History writes are fire-and-forget** — `SentimentAnalyzer.tsx` posts to `/api/history/create-history-obj` with `.catch(console.error)` and never surfaces failures to the user; an analysis can render successfully while silently failing to save.
-- **`DJANGO_SECRET_KEY` regenerates every restart if unset** — harmless for the JWT-verified `/api/analyze/` path, but breaks session/CSRF continuity for `/admin/` across deploys.
-- **Single SQLite file for Django's own tables** — fine at this scale; multiple backend replicas behind a load balancer would need Postgres (already available, unused, in the Nix shells).
+- **In-memory throttle doesn't scale past one worker** `ScopedRateThrottle`'s default cache backend is per-process. With Gunicorn's 2 workers (or any horizontal scaling), the effective limit is closer to `20 × worker_count`/min, not a global 20/min. Needs a shared cache (Redis/Memcached).
+- **History writes are fire-and-forget** `SentimentAnalyzer.tsx` posts to `/api/history/create-history-obj` with `.catch(console.error)` and never surfaces failures to the user; an analysis can render successfully while silently failing to save.
+- **`DJANGO_SECRET_KEY` regenerates every restart if unset** harmless for the JWT-verified `/api/analyze/` path, but breaks session/CSRF continuity for `/admin/` across deploys.
+- **Single SQLite file for Django's own tables** fine at this scale; multiple backend replicas behind a load balancer would need Postgres (already available, unused, in the Nix shells).
 
 **Cosmetic / hygiene:**
-- **Nested backend directory naming** (`sentiment-analyzer-backend/sentiment-analyzer-backend/`) — confusing but non-blocking; collapsing it means updating `docker-compose.yml`'s build context and every path reference.
-- **`flake.nix`'s `packages.frontend` derivation points at `./sentiment-analyzer`**, but the actual directory is `sentiment-analyzer-frontend/` — the Nix build package target is currently stale relative to the real folder name.
-- **`manage.py`'s `.env.local` → `.env` fallback is a no-op** — both `env_local` and `env_standard` resolve to the same `base_dir / ".env"` path, so the "try `.env.local` first" comment doesn't reflect what the code does.
-- **No CI pipeline** — `api/tests.py` exists but nothing runs it automatically on push/PR.
-- **No license file** — add one (MIT, Apache-2.0, etc.) to clarify usage terms.
+- **Nested backend directory naming** (`sentiment-analyzer-backend/sentiment-analyzer-backend/`) confusing but non-blocking; collapsing it means updating `docker-compose.yml`'s build context and every path reference.
+- **`flake.nix`'s `packages.frontend` derivation points at `./sentiment-analyzer`**, but the actual directory is `sentiment-analyzer-frontend/` the Nix build package target is currently stale relative to the real folder name.
+- **`manage.py`'s `.env.local` → `.env` fallback is a no-op** both `env_local` and `env_standard` resolve to the same `base_dir / ".env"` path, so the "try `.env.local` first" comment doesn't reflect what the code does.
+- **No CI pipeline** `api/tests.py` exists but nothing runs it automatically on push/PR.
+- **No license file** add one (MIT, Apache-2.0, etc.) to clarify usage terms.
 
 ---
 
