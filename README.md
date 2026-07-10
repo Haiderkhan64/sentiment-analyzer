@@ -1,5 +1,9 @@
 # Sentiment Analyzer
 
+<p align="center">
+  <img src="sentiment-analyzer-frontend/public/assets/logo.svg" alt="Sentiment Analyzer logo" width="140"/>
+</p>
+
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)
 ![React](https://img.shields.io/badge/React-19--rc-61DAFB?logo=react&logoColor=black)
 ![Django](https://img.shields.io/badge/Django-5.1-092E20?logo=django)
