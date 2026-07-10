@@ -1,10 +1,31 @@
+# IDE
 .idea/
+.vscode/
 
-sentiment-analyzer-backend/**/db.sqlite3
-sentiment-analyzer-backend/**/env/
-sentiment-analyzer-backend/**/venv/
-sentiment-analyzer-backend/**/__pycache__/
-sentiment-analyzer-backend/**/.env
-
+# macOS
 .DS_Store
+
+# Logs
 *.log
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+env/
+venv/
+
+# Django
+db.sqlite3
+
+# Node.js
+node_modules/
+.next/
+out/
+dist/
+coverage/
