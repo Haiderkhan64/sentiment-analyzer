@@ -63,11 +63,11 @@ graph TB
 - Pulls the bearer token off `Authorization`.
 - Resolves the signing key from Clerk's JWKS endpoint (`{CLERK_ISSUER}/.well-known/jwks.json`), cached in-process for 1 hour, with a one-time forced refetch if the token's `kid` isn't found (handles key rotation without a restart).
 - Verifies the RS256 signature, issuer, and required claims (`exp`, `iat`, `sub`) via PyJWT.
-- Wraps the Clerk user id in a minimal `ClerkUser` shim (`is_authenticated = True`) so DRF's `IsAuthenticated` — the project-wide default in `settings.py` — works without a real Django `User` row.
+- Wraps the Clerk user id in a minimal `ClerkUser` shim (`is_authenticated = True`) so DRF's `IsAuthenticated` the project-wide default in `settings.py` works without a real Django `User` row.
 
 A missing, malformed, expired, or badly-signed token is rejected with `401` before the view body runs.
 
-**Django is stateless with respect to product data.** `api/models.py` is empty; Django never touches MongoDB. Its SQLite database only holds Django's own internal tables (admin, sessions) — and even those aren't durable across restarts unless `DJANGO_SECRET_KEY` is pinned. All history and user records live in **MongoDB**, written by the Next.js API routes (`/api/history/*`) via Mongoose. Django's sole job is: verify the caller, run inference, stream the result.
+**Django is stateless with respect to product data.** `api/models.py` is empty; Django never touches MongoDB. Its SQLite database only holds Django's own internal tables (admin, sessions) and even those aren't durable across restarts unless `DJANGO_SECRET_KEY` is pinned. All history and user records live in **MongoDB**, written by the Next.js API routes (`/api/history/*`) via Mongoose. Django's sole job is: verify the caller, run inference, stream the result.
 
 ## Tech Stack
 
@@ -90,11 +90,11 @@ A missing, malformed, expired, or badly-signed token is rejected with `401` befo
 | django-cors-headers | 4.6.0 | CORS, incl. `Authorization` preflight |
 | Transformers | 4.47.1 | ML pipeline |
 | PyTorch (CPU build) | 2.5.1+cpu | Model inference backend |
-| Gunicorn | 23.0.0 | Production WSGI server (Docker only — `runserver` stays local-dev-only) |
+| Gunicorn | 23.0.0 | Production WSGI server (Docker only `runserver` stays local-dev-only) |
 
 **Infra**
 - Nix flakes for reproducible dev shells (`nix develop`)
-- Docker + Docker Compose — both Dockerfiles pin Node 20 / Python 3.11 to match the Nix flake; each service ships a `.dockerignore` so `node_modules`, `__pycache__`, `db.sqlite3`, and `.env*` never land in an image
+- Docker + Docker Compose both Dockerfiles pin Node 20 / Python 3.11 to match the Nix flake; each service ships a `.dockerignore` so `node_modules`, `__pycache__`, `db.sqlite3`, and `.env*` never land in an image
 - Model: [`distilbert-base-uncased-finetuned-sst-2-english`](https://huggingface.co/distilbert-base-uncased-finetuned-sst-2-english)
 
 ## Project Structure
@@ -107,7 +107,7 @@ sentiment-analyzer/
 ├── sentiment-analyzer-frontend/
 │   ├── .dockerignore
 │   ├── app/
-│   │   ├── (auth)/               # sign-in, sign-up — public routes
+│   │   ├── (auth)/               # sign-in, sign-up public routes
 │   │   ├── (root)/page.tsx       # main app shell
 │   │   ├── api/
 │   │   │   ├── user/route.ts
@@ -132,12 +132,12 @@ sentiment-analyzer/
 │   └── Dockerfile
 │
 └── sentiment-analyzer-backend/
-    └── sentiment-analyzer-backend/   # ⚠ nested — same name twice, see note below
+    └── sentiment-analyzer-backend/   # ⚠ nested same name twice, see note below
         ├── .env                       # CLERK_ISSUER, DJANGO_ALLOWED_HOSTS, CORS_ALLOWED_ORIGINS, DJANGO_SECRET_KEY
         ├── .dockerignore
         ├── entrypoint.sh              # runs migrations, then launches Gunicorn
         ├── api/
-        │   ├── authentication.py      # ClerkJWTAuthentication — verifies bearer tokens via JWKS
+        │   ├── authentication.py      # ClerkJWTAuthentication verifies bearer tokens via JWKS
         │   ├── views.py               # /api/analyze/ — auth + throttle + length check + streaming
         │   ├── tests.py                # unit tests, Clerk auth mocked
         │   └── urls.py
@@ -149,15 +149,15 @@ sentiment-analyzer/
         └── Dockerfile
 ```
 
-> **Nesting note:** the backend directory contains itself twice (`sentiment-analyzer-backend/sentiment-analyzer-backend/`). `manage.py` lives in the **inner** folder — if you get "can't open file manage.py", you're one directory too shallow.
+> **Nesting note:** the backend directory contains itself twice (`sentiment-analyzer-backend/sentiment-analyzer-backend/`). `manage.py` lives in the **inner** folder if you get "can't open file manage.py", you're one directory too shallow.
 
 ## Prerequisites
 
-- **Node.js 20** (LTS — matches the Nix flake and the frontend Docker image)
+- **Node.js 20** (LTS matches the Nix flake and the frontend Docker image)
 - **Python 3.11** (matches the Nix flake and the backend Docker image)
 - A **MongoDB** instance (Atlas or self-hosted) for history storage
-- A **Clerk** application — you need its publishable/secret keys (frontend) **and** its issuer URL (backend, for JWT verification)
-- **Nix** (optional, recommended — this repo ships a flake) or **Docker** (optional, for a fully containerized run)
+- A **Clerk** application you need its publishable/secret keys (frontend) **and** its issuer URL (backend, for JWT verification)
+- **Nix** (optional, recommended this repo ships a flake) or **Docker** (optional, for a fully containerized run)
 
 ## Getting Started
 
